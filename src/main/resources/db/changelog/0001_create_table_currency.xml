@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
+    <changeSet id="0001-1" author="Robert Kusz">
+        <createTable tableName="currency">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="currency_code" type="VARCHAR(3)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="mid" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="change" type="FLOAT"/>
+            <column name="date_time" type="DATE"/>
+            <column name="year_max" type="FLOAT"/>
+            <column name="year_min" type="FLOAt"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
