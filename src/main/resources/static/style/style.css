@@ -96,3 +96,17 @@ a {
 .odd-row:hover{
     background-color:#303030;
 }
+/*SINGLE_CURRENCY_START*/
+.info-box{
+    margin:0 auto;
+    background-color:#353535;
+}
+.info-box-header{
+        display: flex;
+        flex-direction: row;
+}
+.box {
+    flex: 1;
+    border: 1px solid #ccc;
+  }
+/*SINGLE_CURRENCY_END*/

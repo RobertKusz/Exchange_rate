@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Kantor walut</title>
+</head>
+<body>
+<main class="main-content" layout:fragment="content">
+    <h1 th:text="qew"></h1>
+    <div class="info-box">
+        <div class="info-box-header">
+            <div class="box">
+                <h1 th:text="${currency.mid}"></h1>
+                <p th:text="|Aktualizowane: ${currency.dateTime}|"></p>
+            </div>
+            <div class="box">
+                <p th:text="|Min 52 tyg: ${currency.yearMin}|"></p>
+                <p th:text="|Min 52 tyg: ${currency.yearMax}|"></p>
+                <p th:text="|Zmiana od pocz. okresu: ${currency.change}%|"></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

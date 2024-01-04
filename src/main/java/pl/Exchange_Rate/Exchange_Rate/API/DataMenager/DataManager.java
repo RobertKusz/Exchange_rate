@@ -9,24 +9,27 @@ import pl.Exchange_Rate.Exchange_Rate.API.json_parsing.JsonUtils;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.Currency;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.CurrencyRepository;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class DataManager {
     private final CurrencyRepository currencyRepository;
+    private final NbpApi nbpApi;
 
-    public DataManager(CurrencyRepository currencyRepository) {
+    public DataManager(CurrencyRepository currencyRepository, NbpApi nbpApi) {
         this.currencyRepository = currencyRepository;
+        this.nbpApi = nbpApi;
     }
     @Transactional
     public void convertAndSaveData() {
-        NbpApi nbpApi = new NbpApi();
         try {
-            String dataNbpApi = nbpApi.getDataNbpApi();
+            String dataNbpApi = nbpApi.getTodaysCurrency();
             JsonNode parsedData = JsonUtils.parse(dataNbpApi);
 
             JsonNode ratesNode = parsedData.get(0).path("rates");
-            if (parsedData.isArray() && parsedData.size() > 0) {
+
+            if (parsedData.isArray() && !parsedData.isEmpty()) {
                 if (!ratesNode.isMissingNode() && ratesNode.isArray()) {
                     for (JsonNode rate : ratesNode) {
                         Currency currency = new Currency();
@@ -51,4 +54,24 @@ public class DataManager {
             e.printStackTrace();
         }
     }
+    public List<Currency> get52WeeksData(String code) throws JsonProcessingException {
+        String dataNbpApi = nbpApi.get52WeeksData(code);
+        JsonNode parsedData = JsonUtils.parse(dataNbpApi);
+
+        JsonNode ratesNode = parsedData.path("rates");
+        List<Currency> currencies = new ArrayList<>();
+        for (JsonNode rate : ratesNode) {
+            Currency currency = new Currency();
+            currency.setName(rate.path("currency").asText());
+            currency.setCurrencyCode(rate.path("code").asText());
+            currency.setMid(rate.path("mid").asDouble());
+            currencies.add(currency);
+        }
+        return currencies;
+
+
+        //  skonczone tutaj, chciałbym zeby ta klasa zwracała dane sprzed 52 tygodni
+        //plan na to jest zeby wspólny kod z klasy wyzej wydzielić do osobniej klasy i wydobyć dane
+    }
+
 }

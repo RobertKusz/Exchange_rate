@@ -1,30 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <meta charset="UTF-8">
-    <title>home</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-          integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="../static/style/style.css" th:href="@{style/style.css}" rel="stylesheet">
+    <title>Kantor walut</title>
 </head>
 <body>
-<div class="container">
-    <ul class="menu">
-        <li class="menu-logo-container">
-            <a href="#">LOGO</a>
-        </li>
-        <li class="menu-item">
-            <a href="#">API</a>
-        </li>
-        <li class="menu-item">
-            <a href="#">Info</a>
-        </li>
-    </ul>
-    <main class="main-content">
+    <main class="main-content" layout:fragment="content">
         <table class="currency-list">
             <thead>
             <tr class="currency-list-head">
@@ -36,17 +18,18 @@
             <tbody>
                 <tr th:class="currency-list-body" th:each="currency, iterStat: ${currencies}"
                     th:classappend="${iterStat.index % 2 == 0 ? 'even-row' : 'odd-row'}">
-                    <td class="list-item" th:text="${currency.name}">Dolar - test</td>
-                    <td class="list-item" th:text="${currency.currencyCode}">USD - test</td>
-                    <td class="list-item" th:text="${currency.mid}">3.50 - test</td>
+                    <td class="list-item">
+                        <a th:href="@{|/waluta/${currency.currencyCode}|}" th:text="${currency.name}">Dolar - test</a>
+                    </td>
+                    <td class="list-item" >
+                        <a th:href="@{|/waluta/${currency.currencyCode}|}"th:text="${currency.currencyCode}">Dolar - test</a>
+                    </td>
+                    <td class="list-item" th:text="${currency.mid}">
+                        <a th:href="@{|/waluta/${currency.currencyCode}|}"th:text="${currency.mid}">Dolar - test</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
-
     </main>
-    <footer class="footer">
-        <p>Kursy walut 2022 <i class="fas fa-copyright"></i> Robert Kusz</p>
-    </footer>
-</div>
 </body>
 </html> 
