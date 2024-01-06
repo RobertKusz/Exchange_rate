@@ -18,7 +18,7 @@ public class NbpApi {
     public String getTodaysCurrency() {
         URL url = null;
         try {
-            url = new URL("http://api.nbp.pl/api/exchangerates/tables/A/today/");
+            url = new URL("http://api.nbp.pl/api/exchangerates/tables/A/");
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -29,7 +29,17 @@ public class NbpApi {
         LocalDate nowMinus52weeks = now.minusWeeks(52);
         URL url = null;
         try {
-            url = new URL("http://api.nbp.pl/api/exchangerates/rates/A/"+code+"/"+nowMinus52weeks+"/"+now+"/");
+            //url = new URL("http://api.nbp.pl/api/exchangerates/rates/A/"+code+"/"+nowMinus52weeks+"/"+now+"/");
+            url = new URL("http://api.nbp.pl/api/exchangerates/rates/A/"+code+"/last/52/");
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+        return getData(url);
+    }
+    public String getDataFromTo(String code, LocalDate from, LocalDate to) {
+        URL url = null;
+        try {
+            url = new URL("http://api.nbp.pl/api/exchangerates/rates/A/"+code+"/"+to+"/"+from+"/");
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }

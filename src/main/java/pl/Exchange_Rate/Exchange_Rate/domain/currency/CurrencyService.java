@@ -7,8 +7,8 @@ import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyHomePageDto;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyStatsDto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -41,19 +41,37 @@ public class CurrencyService {
                     .stream()
                     .map(CurrencyDtoMapper::mapToStatsDto)
                     .toList();
-            return calculateCurrenciesStats(currencies);
+            return calculateCurrencyStats(currencies, code);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public Map<String, Double> getCurrencyValueFromTo(String code, LocalDate from, LocalDate to){
+
+        if(to == null){
+            to = LocalDate.now().minusDays(7);
+        }
+        if(from == null){
+            from = LocalDate.now();
+        }
+        Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
+        try {
+            return dataManager.getDataFromTo(code, from, to);
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private CurrencyStatsDto calculateCurrenciesStats(List<CurrencyStatsDto> currencies) {
-        CurrencyStatsDto currencyStatsDto = currencies.get(currencies.size()-1);
-        currencyStatsDto.setYearMin(getMinValue(currencies));
-        currencyStatsDto.setYearMax(getMaxValue(currencies));
-        currencyStatsDto.setChange(getValueChange(currencies));
-        currencyStatsDto.setDateTime(LocalDate.now());
-        return currencyStatsDto;
+
+    private CurrencyStatsDto calculateCurrencyStats(List<CurrencyStatsDto> currencies, String code) {
+        Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
+        currency.setMid(currencies.get(currencies.size()-1).getMid());
+        currency.setYearMin(getMinValue(currencies));
+        currency.setYearMax(getMaxValue(currencies));
+        currency.setChange(getValueChange(currencies));
+        currency.setDateTime(LocalDate.now());
+        return CurrencyDtoMapper.mapToStatsDto(currency);
     }
 
     private double getMaxValue(List<CurrencyStatsDto> currencies) {

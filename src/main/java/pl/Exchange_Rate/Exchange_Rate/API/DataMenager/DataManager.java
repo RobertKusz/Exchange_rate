@@ -9,8 +9,8 @@ import pl.Exchange_Rate.Exchange_Rate.API.json_parsing.JsonUtils;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.Currency;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.CurrencyRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class DataManager {
@@ -62,16 +62,26 @@ public class DataManager {
         List<Currency> currencies = new ArrayList<>();
         for (JsonNode rate : ratesNode) {
             Currency currency = new Currency();
-            currency.setName(rate.path("currency").asText());
-            currency.setCurrencyCode(rate.path("code").asText());
+//            currency.setName(rate.path("currency").asText());
+//            currency.setCurrencyCode(rate.path("code").asText());
             currency.setMid(rate.path("mid").asDouble());
+//            LocalDate effectiveDate = LocalDate.parse(rate.path("effectiveDate").asText());
+            currency.setDateTime(LocalDate.parse(rate.path("effectiveDate").asText()));
             currencies.add(currency);
         }
         return currencies;
-
-
-        //  skonczone tutaj, chciałbym zeby ta klasa zwracała dane sprzed 52 tygodni
-        //plan na to jest zeby wspólny kod z klasy wyzej wydzielić do osobniej klasy i wydobyć dane
     }
+    public Map<String, Double> getDataFromTo(String code, LocalDate from, LocalDate to) throws JsonProcessingException {
+        String dataNbpApi = nbpApi.getDataFromTo(code, from, to);
+        JsonNode parsedData = JsonUtils.parse(dataNbpApi);
 
+        JsonNode ratesNode = parsedData.path("rates");
+        Map<String, Double> currencyValues= new LinkedHashMap<>();
+        for (JsonNode rate : ratesNode) {
+            String valueData = rate.path("effectiveDate").asText();
+            double mid = rate.path("mid").asDouble();
+            currencyValues.put(valueData, mid);
+        }
+        return currencyValues;
+    }
 }
