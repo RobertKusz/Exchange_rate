@@ -16,11 +16,7 @@ public class CurrencyDtoMapper {
         return new CurrencyStatsDto(
                 currency.getName(),
                 currency.getCurrencyCode(),
-                currency.getMid(),
-                currency.getChange(),
-                currency.getDateTime(),
-                currency.getYearMax(),
-                currency.getYearMin()
+                currency.getMid()
         );
     }
 }

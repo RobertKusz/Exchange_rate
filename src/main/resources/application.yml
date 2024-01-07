@@ -2,5 +2,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
   profiles:
     active: dev

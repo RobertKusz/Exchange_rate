@@ -1,6 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:test
+    url: jdbc:mysql://localhost:3306/exchange_rate
+    username: root
+    password: admin
   liquibase:
-    contexts: dev
-    change-log: classpath:db/changelog/master.xml
+    contexts: prod
+

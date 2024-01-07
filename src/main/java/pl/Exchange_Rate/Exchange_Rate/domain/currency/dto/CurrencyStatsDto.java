@@ -6,26 +6,20 @@ public class CurrencyStatsDto {
     private String name;
     private String currencyCode;
     private double mid;
-    private double change;
+    private double currencyChange;
     private LocalDate dateTime;
     private double yearMax;
     private double yearMin;
 
+    public CurrencyStatsDto() {
+    }
 
     public CurrencyStatsDto(String name,
                             String currencyCode,
-                            double mid,
-                            double change,
-                            LocalDate dateTime,
-                            double yearMax,
-                            double yearMin) {
+                            double mid) {
         this.name = name;
         this.currencyCode = currencyCode;
         this.mid = mid;
-        this.change = change;
-        this.dateTime = dateTime;
-        this.yearMax = yearMax;
-        this.yearMin = yearMin;
     }
 
     public String getName() {
@@ -52,12 +46,12 @@ public class CurrencyStatsDto {
         this.mid = mid;
     }
 
-    public double getChange() {
-        return change;
+    public double getCurrencyChange() {
+        return currencyChange;
     }
 
-    public void setChange(double change) {
-        this.change = change;
+    public void setCurrencyChange(double change) {
+        this.currencyChange = change;
     }
 
     public LocalDate getDateTime() {
@@ -85,16 +79,4 @@ public class CurrencyStatsDto {
     }
 
 
-    @Override
-    public String toString() {
-        return "CurrencyStatsDto{" +
-                "name='" + name + '\'' +
-                ", currencyCode='" + currencyCode + '\'' +
-                ", mid=" + mid +
-                ", change=" + change +
-                ", dateTime=" + dateTime +
-                ", yearMax=" + yearMax +
-                ", yearMin=" + yearMin +
-                '}';
-    }
 }

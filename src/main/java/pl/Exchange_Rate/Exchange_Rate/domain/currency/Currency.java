@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 public class Currency {
@@ -16,10 +15,10 @@ public class Currency {
     private String name;
     private String currencyCode;
     private double mid;
-    private double change;
-    private LocalDate dateTime;
-    private double yearMax;
-    private double yearMin;
+//    private double currencyChange;
+//    private LocalDate dateTime;
+//    private double yearMax;
+//    private double yearMin;
 
     public Long getId() {
         return id;
@@ -53,35 +52,35 @@ public class Currency {
         this.mid = mid;
     }
 
-    public double getChange() {
-        return change;
-    }
-
-    public void setChange(double change) {
-        this.change = change;
-    }
-
-    public LocalDate getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDate dateTime) {
-        this.dateTime = dateTime;
-    }
-
-    public double getYearMax() {
-        return yearMax;
-    }
-
-    public void setYearMax(double yearMax) {
-        this.yearMax = yearMax;
-    }
-
-    public double getYearMin() {
-        return yearMin;
-    }
-
-    public void setYearMin(double yearMin) {
-        this.yearMin = yearMin;
-    }
+//    public double getCurrencyChange() {
+//        return currencyChange;
+//    }
+//
+//    public void setCurrencyChange(double currencyChange) {
+//        this.currencyChange = currencyChange;
+//    }
+//
+//    public LocalDate getDateTime() {
+//        return dateTime;
+//    }
+//
+//    public void setDateTime(LocalDate dateTime) {
+//        this.dateTime = dateTime;
+//    }
+//
+//    public double getYearMax() {
+//        return yearMax;
+//    }
+//
+//    public void setYearMax(double yearMax) {
+//        this.yearMax = yearMax;
+//    }
+//
+//    public double getYearMin() {
+//        return yearMin;
+//    }
+//
+//    public void setYearMin(double yearMin) {
+//        this.yearMin = yearMin;
+//    }
 }

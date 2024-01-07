@@ -19,7 +19,7 @@ public class HomeController {
 
     @GetMapping("/")
     String home(Model model){
-        currencyService.fetchDataAndSaveToDatabase();
+//        currencyService.fetchDataAndSaveToDatabase();
         List<CurrencyHomePageDto> currencies = currencyService.getAllCurrencies();
         model.addAttribute("currencies", currencies);
         return "homePage";

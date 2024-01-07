@@ -5,6 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.2.xsd">
     <changeSet id="0001-1" author="Robert Kusz">
+        <validCheckSum>8:1d4a381409e1eeb8d4f003aa37253e55</validCheckSum>
         <createTable tableName="currency">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
@@ -13,15 +14,15 @@
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="currency_code" type="VARCHAR(3)">
-                <constraints unique="true" nullable="false"/>
+                <constraints unique="true" nullable="true"/>
             </column>
-            <column name="mid" type="FLOAT">
+            <column name="mid" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
-            <column name="change" type="FLOAT"/>
+            <column name="currency_change" type="DOUBLE"/>
             <column name="date_time" type="DATE"/>
-            <column name="year_max" type="FLOAT"/>
-            <column name="year_min" type="FLOAt"/>
+            <column name="year_max" type="DOUBLE"/>
+            <column name="year_min" type="DOUBLE"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -53,8 +53,6 @@ public class NbpApi {
             conn.setRequestMethod("GET");
             conn.connect();
         int responseCode = conn.getResponseCode();
-            System.out.println(url.toString());
-            System.out.println(responseCode);
 
             if (responseCode != 200) {
                 throw new RuntimeException("HttpResponseCode: " + responseCode);

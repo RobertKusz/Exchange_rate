@@ -8,6 +8,7 @@ import pl.Exchange_Rate.Exchange_Rate.API.api_connetion.NbpApi;
 import pl.Exchange_Rate.Exchange_Rate.API.json_parsing.JsonUtils;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.Currency;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.CurrencyRepository;
+import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyStatsDto;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -22,12 +23,13 @@ public class DataManager {
         this.nbpApi = nbpApi;
     }
     @Transactional
-    public void convertAndSaveData() {
+    public List<Currency> convertAndSaveData() {
         try {
             String dataNbpApi = nbpApi.getTodaysCurrency();
             JsonNode parsedData = JsonUtils.parse(dataNbpApi);
 
             JsonNode ratesNode = parsedData.get(0).path("rates");
+            List<Currency> currencies = new ArrayList<>();
 
             if (parsedData.isArray() && !parsedData.isEmpty()) {
                 if (!ratesNode.isMissingNode() && ratesNode.isArray()) {
@@ -36,7 +38,7 @@ public class DataManager {
                         currency.setName(rate.path("currency").asText());
                         currency.setCurrencyCode(rate.path("code").asText());
                         currency.setMid(rate.path("mid").asDouble());
-                        currencyRepository.save(currency);
+                        currencies.add(currency);
                     }
                 } else {
                     System.out.println("BŁĄD: Brak danych w polu 'rates'");
@@ -46,26 +48,27 @@ public class DataManager {
                 System.out.println("BŁĄD: Nieprawidłowy format odpowiedzi z API");
                 System.out.println("Dane z API: " + dataNbpApi);
             }
+            return currencies;
         } catch (JsonProcessingException e) {
             System.out.println("BŁĄD: Problem z parsowaniem danych JSON");
             e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (Exception e) {
             System.out.println("BŁĄD: Inny problem");
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
-    public List<Currency> get52WeeksData(String code) throws JsonProcessingException {
+    public List<CurrencyStatsDto> get52WeeksData(String code) throws JsonProcessingException {
         String dataNbpApi = nbpApi.get52WeeksData(code);
         JsonNode parsedData = JsonUtils.parse(dataNbpApi);
 
         JsonNode ratesNode = parsedData.path("rates");
-        List<Currency> currencies = new ArrayList<>();
+        List<CurrencyStatsDto> currencies = new ArrayList<>();
         for (JsonNode rate : ratesNode) {
-            Currency currency = new Currency();
-//            currency.setName(rate.path("currency").asText());
-//            currency.setCurrencyCode(rate.path("code").asText());
+            CurrencyStatsDto currency = new CurrencyStatsDto();
+            currency.setCurrencyCode(code);
             currency.setMid(rate.path("mid").asDouble());
-//            LocalDate effectiveDate = LocalDate.parse(rate.path("effectiveDate").asText());
             currency.setDateTime(LocalDate.parse(rate.path("effectiveDate").asText()));
             currencies.add(currency);
         }

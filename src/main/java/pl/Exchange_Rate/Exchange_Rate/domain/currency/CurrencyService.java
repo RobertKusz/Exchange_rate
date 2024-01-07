@@ -1,6 +1,7 @@
 package pl.Exchange_Rate.Exchange_Rate.domain.currency;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.Exchange_Rate.Exchange_Rate.API.DataMenager.DataManager;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyHomePageDto;
@@ -30,22 +31,35 @@ public class CurrencyService {
                 .collect(Collectors.toList());
     }
 
+    @Scheduled(cron = "0 0 12 * * ?")
     public void fetchDataAndSaveToDatabase() {
-            dataManager.convertAndSaveData();
+        currencyRepository.saveAll(dataManager.convertAndSaveData());
+        //zrobic te matode tak żeby zapisywała aktualny kurs do bazy danych do nowej tabeli
     }
 
     public CurrencyStatsDto getCurrencyInfo(String code){
         Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
         try {
-            List<CurrencyStatsDto> currencies = dataManager.get52WeeksData(code)
-                    .stream()
-                    .map(CurrencyDtoMapper::mapToStatsDto)
-                    .toList();
+            List<CurrencyStatsDto> currencies = dataManager.get52WeeksData(code);
             return calculateCurrencyStats(currencies, code);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
+    private CurrencyStatsDto calculateCurrencyStats(List<CurrencyStatsDto> currencies, String code) {
+        Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
+
+        currency.setMid(currencies.get(currencies.size()-1).getMid());
+        CurrencyStatsDto currencyStatsDto = CurrencyDtoMapper.mapToStatsDto(currency);
+
+        currencyStatsDto.setYearMin(getMinValue(currencies));
+        currencyStatsDto.setYearMax(getMaxValue(currencies));
+        currencyStatsDto.setCurrencyChange(getValueChange(currencies));
+        currencyStatsDto.setDateTime(LocalDate.now());
+
+        return currencyStatsDto;
+    }
+
     public Map<String, Double> getCurrencyValueFromTo(String code, LocalDate from, LocalDate to){
 
         if(to == null){
@@ -64,15 +78,7 @@ public class CurrencyService {
     }
 
 
-    private CurrencyStatsDto calculateCurrencyStats(List<CurrencyStatsDto> currencies, String code) {
-        Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
-        currency.setMid(currencies.get(currencies.size()-1).getMid());
-        currency.setYearMin(getMinValue(currencies));
-        currency.setYearMax(getMaxValue(currencies));
-        currency.setChange(getValueChange(currencies));
-        currency.setDateTime(LocalDate.now());
-        return CurrencyDtoMapper.mapToStatsDto(currency);
-    }
+
 
     private double getMaxValue(List<CurrencyStatsDto> currencies) {
         double max = currencies.get(0).getMid();

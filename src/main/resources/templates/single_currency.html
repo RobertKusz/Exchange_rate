@@ -18,7 +18,7 @@
             <div class="box">
                 <p th:text="|Min 52 tyg: ${currency.yearMin}|"></p>
                 <p th:text="|Min 52 tyg: ${currency.yearMax}|"></p>
-                <p th:text="|Zmiana od pocz. okresu: ${currency.change}%|"></p>
+                <p th:text="|Zmiana od pocz. okresu: ${currency.currencyChange}|"></p>
             </div>
         </div>
         <div id="highchart">
@@ -26,7 +26,6 @@
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://code.highcharts.com/highcharts.js"></script>
         <script src="https://code.highcharts.com/modules/exporting.js"></script>
