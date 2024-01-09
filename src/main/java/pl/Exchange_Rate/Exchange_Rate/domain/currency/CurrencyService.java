@@ -1,9 +1,11 @@
 package pl.Exchange_Rate.Exchange_Rate.domain.currency;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.transaction.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.Exchange_Rate.Exchange_Rate.API.DataMenager.DataManager;
+import pl.Exchange_Rate.Exchange_Rate.database.DataProcessor;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyHomePageDto;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyStatsDto;
 
@@ -31,10 +33,15 @@ public class CurrencyService {
                 .collect(Collectors.toList());
     }
 
-    @Scheduled(cron = "0 0 12 * * ?")
+//    @Scheduled(cron = "0 0 12 * * ?")
+    @Transactional
     public void fetchDataAndSaveToDatabase() {
-        currencyRepository.saveAll(dataManager.convertAndSaveData());
+        List<Currency> currencies = dataManager.convertAndSaveData();
+        List<Currency> currenciesToSaveInRepository = StreamSupport.stream(currencyRepository.findAll().spliterator(), false)
+                .toList();
+
         //zrobic te matode tak żeby zapisywała aktualny kurs do bazy danych do nowej tabeli
+        DataProcessor.saveDataToDatabase(currenciesToSaveInRepository);
     }
 
     public CurrencyStatsDto getCurrencyInfo(String code){

@@ -15,10 +15,6 @@ public class Currency {
     private String name;
     private String currencyCode;
     private double mid;
-//    private double currencyChange;
-//    private LocalDate dateTime;
-//    private double yearMax;
-//    private double yearMin;
 
     public Long getId() {
         return id;

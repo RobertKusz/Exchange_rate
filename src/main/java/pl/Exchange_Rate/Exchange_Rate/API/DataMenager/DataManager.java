@@ -39,6 +39,7 @@ public class DataManager {
                         currency.setCurrencyCode(rate.path("code").asText());
                         currency.setMid(rate.path("mid").asDouble());
                         currencies.add(currency);
+
                     }
                 } else {
                     System.out.println("BŁĄD: Brak danych w polu 'rates'");

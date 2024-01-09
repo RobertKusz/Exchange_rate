@@ -5,6 +5,9 @@ public class CurrencyHomePageDto {
     private String currencyCode;
     private double mid;
 
+    public CurrencyHomePageDto() {
+    }
+
     public CurrencyHomePageDto(String name, String currencyCode, double mid) {
         this.name = name;
         this.currencyCode = currencyCode;

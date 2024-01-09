@@ -23,6 +23,7 @@ public class CurrencyController {
     String getCurrencyInfo(Model model, @PathVariable String code,
                            @PathVariable(required = false) LocalDate from,
                            @PathVariable(required = false) LocalDate to){
+
         CurrencyStatsDto currencyInfo = currencyService.getCurrencyInfo(code);
         model.addAttribute("currency",currencyInfo);
         Map<String, Double> currencyValueFromTo = currencyService.getCurrencyValueFromTo(code, from, to);

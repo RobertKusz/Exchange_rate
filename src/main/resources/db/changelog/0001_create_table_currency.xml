@@ -19,10 +19,10 @@
             <column name="mid" type="DOUBLE">
                 <constraints nullable="false"/>
             </column>
-            <column name="currency_change" type="DOUBLE"/>
-            <column name="date_time" type="DATE"/>
-            <column name="year_max" type="DOUBLE"/>
-            <column name="year_min" type="DOUBLE"/>
+<!--            <column name="currency_change" type="DOUBLE"/>-->
+<!--            <column name="date_time" type="DATE"/>-->
+<!--            <column name="year_max" type="DOUBLE"/>-->
+<!--            <column name="year_min" type="DOUBLE"/>-->
         </createTable>
     </changeSet>
 </databaseChangeLog>
