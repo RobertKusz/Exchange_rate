@@ -33,14 +33,14 @@ public class CurrencyService {
                 .collect(Collectors.toList());
     }
 
-//    @Scheduled(cron = "0 0 12 * * ?")
+    @Scheduled(cron = "0 0 12 * * ?")
     @Transactional
     public void fetchDataAndSaveToDatabase() {
         List<Currency> currencies = dataManager.convertAndSaveData();
+
         List<Currency> currenciesToSaveInRepository = StreamSupport.stream(currencyRepository.findAll().spliterator(), false)
                 .toList();
 
-        //zrobic te matode tak żeby zapisywała aktualny kurs do bazy danych do nowej tabeli
         DataProcessor.saveDataToDatabase(currenciesToSaveInRepository);
     }
 
@@ -69,15 +69,15 @@ public class CurrencyService {
 
     public Map<String, Double> getCurrencyValueFromTo(String code, LocalDate from, LocalDate to){
 
-        if(to == null){
-            to = LocalDate.now().minusDays(7);
-        }
         if(from == null){
-            from = LocalDate.now();
+            from = LocalDate.now().minusDays(7);
+        }
+        if(to == null){
+            to = LocalDate.now();
         }
         Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
         try {
-            return dataManager.getDataFromTo(code, from, to);
+            return dataManager.getMapDataFromTo(code, from, to);
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

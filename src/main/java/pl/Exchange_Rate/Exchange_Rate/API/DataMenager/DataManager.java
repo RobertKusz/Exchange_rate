@@ -8,6 +8,7 @@ import pl.Exchange_Rate.Exchange_Rate.API.api_connetion.NbpApi;
 import pl.Exchange_Rate.Exchange_Rate.API.json_parsing.JsonUtils;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.Currency;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.CurrencyRepository;
+import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyApiFromTo;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyStatsDto;
 
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ public class DataManager {
                         currency.setCurrencyCode(rate.path("code").asText());
                         currency.setMid(rate.path("mid").asDouble());
                         currencies.add(currency);
+                        currencyRepository.updateCurrencyMid(rate.path("code").asText(), rate.path("mid").asDouble());
 
                     }
                 } else {
@@ -75,7 +77,7 @@ public class DataManager {
         }
         return currencies;
     }
-    public Map<String, Double> getDataFromTo(String code, LocalDate from, LocalDate to) throws JsonProcessingException {
+    public Map<String, Double> getMapDataFromTo(String code, LocalDate from, LocalDate to) throws JsonProcessingException {
         String dataNbpApi = nbpApi.getDataFromTo(code, from, to);
         JsonNode parsedData = JsonUtils.parse(dataNbpApi);
 
@@ -87,5 +89,28 @@ public class DataManager {
             currencyValues.put(valueData, mid);
         }
         return currencyValues;
+    }
+
+    public String convertObjectsToJson(Object currencies) throws JsonProcessingException {
+        return JsonUtils.parseCurrencyToJson(currencies);
+    }
+    public String convertObjectToJson(Currency currency) throws JsonProcessingException {
+        return JsonUtils.parseCurrencyToJson(currency);
+    }
+
+    public List<CurrencyApiFromTo> getListDataFromTo(String code, LocalDate from, LocalDate to) throws JsonProcessingException {
+        String dataNbpApi = nbpApi.getDataFromTo(code, from, to);
+        JsonNode parsedData = JsonUtils.parse(dataNbpApi);
+        JsonNode ratesNode = parsedData.path("rates");
+
+        List<CurrencyApiFromTo> currenciesValue = new ArrayList<>();
+
+        for (JsonNode rate : ratesNode) {
+
+            String effectiveDate = rate.path("effectiveDate").asText();
+            double mid = rate.path("mid").asDouble();
+            currenciesValue.add(new CurrencyApiFromTo(effectiveDate,mid));
+        }
+        return currenciesValue;
     }
 }

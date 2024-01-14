@@ -3,6 +3,7 @@ package pl.Exchange_Rate.Exchange_Rate.API.json_parsing;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.Exchange_Rate.Exchange_Rate.domain.currency.Currency;
 
 public class JsonUtils {
     private static ObjectMapper objectMapper = getDefaultObjectMapper();
@@ -18,5 +19,9 @@ public class JsonUtils {
 
     public static <A> A fromJson(JsonNode node, Class<A> clazz) throws JsonProcessingException {
         return objectMapper.treeToValue(node, clazz);
+    }
+
+    public static String parseCurrencyToJson(Object currencies) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(currencies);
     }
 }

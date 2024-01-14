@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Kantor walut - API</title>
+</head>
+<body layout:fragment="content">
+
+Dzisiejszy kurs wszystkich walut
+<p>/api/all</p>
+
+<!--ToDo-->
+Aktualnie obowiązujący kurs waluty {code}
+<p>/api/rates/{code}</p>
+
+<!--ToDo-->
+Seria ostatnich {topCount} kursów waluty {code}
+<p>/api/rates/{code}/last/{topCount}</p>
+
+
+
+</body>
+</html>
