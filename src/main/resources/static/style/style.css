@@ -26,9 +26,6 @@ a {
     width: 1000px;
 }
 
-.logo{
-    color: #ffc107;
-}
 
 .menu {
     display: flex;
@@ -37,6 +34,7 @@ a {
     background-color: #0a0600;
     width:1000px;
     margin: 0 auto;
+    color: #ffc107;
 }
 
 .menu-item {
@@ -56,8 +54,12 @@ a {
 
 .menu-logo-container{
     display: block;
-    padding: 16px 32px;
-    font-size: 20px;
+    padding: 5px;
+    font-size: 30px
+
+}
+.menu-logo-container a i{
+    color: #ffc107;
 }
 
 .footer {
