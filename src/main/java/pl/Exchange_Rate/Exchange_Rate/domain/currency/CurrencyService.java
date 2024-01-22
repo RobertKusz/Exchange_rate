@@ -9,6 +9,7 @@ import pl.Exchange_Rate.Exchange_Rate.database.DataProcessor;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyHomePageDto;
 import pl.Exchange_Rate.Exchange_Rate.domain.currency.dto.CurrencyStatsDto;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,8 @@ public class CurrencyService {
     @Scheduled(cron = "0 0 12 * * ?")
     @Transactional
     public void fetchDataAndSaveToDatabase() {
-        List<Currency> currencies = dataManager.convertAndSaveData();
+        //List<Currency> currencies = dataManager.convertAndSaveData(); // usunąć/ to było d
+        dataManager.convertAndSaveData();
 
         List<Currency> currenciesToSaveInRepository = StreamSupport.stream(currencyRepository.findAll().spliterator(), false)
                 .toList();
@@ -45,7 +47,7 @@ public class CurrencyService {
     }
 
     public CurrencyStatsDto getCurrencyInfo(String code){
-        Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
+//        Currency currency = currencyRepository.findByCurrencyCode(code).orElseThrow();
         try {
             List<CurrencyStatsDto> currencies = dataManager.get52WeeksData(code);
             return calculateCurrencyStats(currencies, code);
@@ -110,6 +112,10 @@ public class CurrencyService {
         double latestMidValue = currencies.get(0).getMid();
         double newestMidValue = currencies.get(size-1).getMid();
 
-        return (latestMidValue - newestMidValue) / latestMidValue * 100;
+        double change = (latestMidValue - newestMidValue) / latestMidValue * 100;
+
+        return Math.round(change * 100.0) / 100.0;
+
+
     }
 }

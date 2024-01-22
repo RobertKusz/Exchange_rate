@@ -16,6 +16,7 @@ import java.time.LocalDate;
 @Component
 public class NbpApi {
 
+
     public String getTodaysCurrency() {
         String link = "http://api.nbp.pl/api/exchangerates/tables/A/";
         return getDataFromApi(link);
@@ -27,10 +28,11 @@ public class NbpApi {
         return getDataFromApi(link);
     }
     public String getDataFromTo(String code, LocalDate from, LocalDate to) {
-        URL url = null;
+//        URL url = null;
         String link = "http://api.nbp.pl/api/exchangerates/rates/A/"+code+"/"+from+"/"+to+"/" ;
         return getDataFromApi(link);
     }
+
 
     private static String getDataFromApi(String link) {
         try {
